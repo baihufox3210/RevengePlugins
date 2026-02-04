@@ -45,7 +45,6 @@ function applyProvider(
 
 export function cleanUrl(url: string) {
 	const { rules } = useRulesStore.getState();
-	if (!rules?.providers) return url;
 
 	let urlObj: URL;
 	try {
@@ -53,6 +52,14 @@ export function cleanUrl(url: string) {
 	} catch {
 		return url;
 	}
+
+	// 自定義規則：清理 Threads URL 的追蹤參數
+	if (urlObj.hostname.includes("threads.com")) {
+		urlObj.searchParams.delete("xmt");
+		urlObj.searchParams.delete("slof");
+	}
+
+	if (!rules?.providers) return toURL(urlObj);
 
 	for (const provider of Object.values(rules.providers)) {
 		if (!provider.urlPattern) continue;
