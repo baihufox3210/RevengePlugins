@@ -44,7 +44,7 @@ export const serviceIcons = {
 
 export async function openLink(song: Song) {
 	const link = await rebuildLink(song);
-	if (link !== false) url.openDeeplink(link);
+	if (link) url.openDeeplink(link);
 	else {
 		showToast(
 			lang.format("toast.cannot_open_link", {}),
